@@ -1,0 +1,74 @@
+yum upgrade
+
+yum install mc screen wget man htop ntp
+chkconfig ntpd on
+service ntpd start
+
+systemctl disable firewalld
+
+systemctl stop firewalld
+
+systemctl status firewalld
+
+SELINUX=disabled
+
+#Устанавливаем сервер 1Сv8.1 который предворительно скопировали в /tmp/1C/:
+cd /tmp/1C/
+yum localinstall ./*.rpm
+
+chkconfig srv1cv81 on
+
+yum install ImageMagick.i686 ImageMagick libgsf.i686 unixODBC.i686 glib2.i686
+
+rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+yum install ttf2pt1 rpm-build cabextract ttmkfdir
+
+wget http://corefonts.sourceforge.net/msttcorefonts-2.5-1.spec
+rpmbuild -bb msttcorefonts-2.5-1.spec
+
+rpm -ivh ~/rpmbuild/RPMS/noarch/msttcorefonts-2.5-1.noarch.rpm
+
+yum install compat-libstdc++-33
+
+yum install pam.i686
+ln -s /lib/libpam.so.0 /lib/libpam.so
+
+#Запускаем установку DB2: который предворительно скопировали в /tmp/DB2/:
+cd /tmp/DB2/
+./db2_install
+
+нет
+
+useradd -m dasusr1
+useradd -m db2fenc1
+
+passwd dasusr1
+passwd db2fenc1
+passwd usr1cv81
+
+cd /opt/ibm/db2/V9.7/instance/
+./dascrt dasusr1
+
+./db2icrt -u db2fenc1 -p 50000 usr1cv81
+
+su - usr1cv81
+
+db2set DB2_WORKLOAD=1C
+
+db2start
+
+Exit
+
+./db2iauto -on usr1cv81
+
+id usr1cv81
+
+usermod -G 1001 usr1cv81
+
+echo "" >> /home/usr1cv81/.bashrc
+echo "# The following three lines have been added by UDB DB2." >> /home/usr1cv81/.bashrc
+echo "if [ -f /home/db2inst1/sqllib/db2profile ]; then" >> /home/usr1cv81/.bashrc
+echo "    . /home/db2inst1/sqllib/db2profile" >> /home/usr1cv81/.bashrc
+echo "fi" >> /home/usr1cv81/.bashrc
+
+service srv1cv81 restart
