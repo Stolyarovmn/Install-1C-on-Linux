@@ -12,7 +12,6 @@ systemctl status firewalld
 
 SELINUX=disabled
 
-#Устанавливаем сервер 1Сv8.1 который предворительно скопировали в /tmp/1C/:
 cd /tmp/1C/
 yum localinstall ./*.rpm
 
@@ -33,7 +32,6 @@ yum install compat-libstdc++-33
 yum install pam.i686
 ln -s /lib/libpam.so.0 /lib/libpam.so
 
-#Запускаем установку DB2: который предворительно скопировали в /tmp/DB2/:
 cd /tmp/DB2/
 ./db2_install
 
