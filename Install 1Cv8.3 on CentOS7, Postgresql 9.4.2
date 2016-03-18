@@ -1,0 +1,26 @@
+yum upgrade
+yum install mc screen wget man htop ntp
+chkconfig ntpd on
+service ntpd start
+Firewalld systemctl disable firewalld
+Firewalld systemctl stop firewalld
+Firewalld systemctl status firewalld
+SELINUX=disabled
+cd /tmp/1C/
+yum localinstall ./*.rpm
+chkconfig srv1cv83 on
+service srv1cv81 start
+yum install ImageMagick.i686 ImageMagick libgsf.i686 unixODBC.i686 glib2.i686
+yum localinstall ./*.rpm
+export LANG=ru_RU.utf-8
+/etc/init.d/postgresql-9.4
+chkconfig postgresql-9.4
+/etc/init.d/postgresql-9.4 start
+su postgres
+psql postgres
+alter user postgres with password 'postgres';
+\q
+exit
+nano /var/lib/pgsql/9.4/data/pg_hba.cong
+/etc/init.d/postgresql-9.4 restart
+/etc/init.d/srv1cv83 restart
